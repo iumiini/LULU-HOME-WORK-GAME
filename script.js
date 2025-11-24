@@ -1,39 +1,222 @@
-// 神秘求職回應庫（全部都是外送員！）
-const fortunes = [
-    "🛵 宇宙的能量指引著你，你的真實天命是成為一名「外送員」！穿梭在城市的大街小巷，將美食與希望送達每個角落。",
-    "🌙 星辰的軌跡已經清晰顯現，你注定要成為「外送員」！風雨無阻，你將是這個時代最閃耀的騎士。",
-    "🔮 神秘的水晶球看到了你的未來，你將以「外送員」的身份，體驗人生百態，收穫無數故事與滿足感。",
-    "⭐ 命運之輪停在了「外送員」的位置！這是宇宙為你精心安排的職業，請欣然接受這份榮耀的召喚。",
-    "🌟 來自遙遠星系的訊息：放下那些不切實際的幻想吧，你的使命是成為「外送員」，送餐才是你的星辰大海！",
-    "💫 宇宙的智慧告訴我，你最適合的職業就是「外送員」！自由的工作時間，健康的運動量，完美的選擇！",
-    "🌠 靈性的指引顯示，無論你想成為什麼，最終你都會發現「外送員」才是你的歸宿。接受它吧！",
-    "✨ 神秘的力量環繞著你，並異口同聲地說：「去當外送員吧！」這是宇宙對你最真誠的建議。",
-    "🌌 從宇宙深處傳來的啟示：別再猶豫了，「外送員」這個職業在向你招手！機車已備好，只等你上路！",
-    "🎇 星光閃爍傳遞著訊息：你的願望已被宇宙聽見，而宇宙的回答是——「外送員」！就是你了！"
+// 關鍵字分類系統
+const careerCategories = {
+    tech: {
+        keywords: ['工程師', '程式', '軟體', '開發', 'AI', '人工智慧', '科技', '網頁', 'APP', '資訊', '程式設計師', '資工', '電腦', '演算法', '網路', '系統', '架構師', '前端', '後端', '全端'],
+        responses: [
+            {
+                intro: "科技改變世界的夢想很崇高，但",
+                transition: "宇宙看見了一個更實際的道路：用雙輪和熱情改變城市的每個角落",
+                outro: "況且，科技會被淘汰，但人們永遠需要吃飯！"
+            },
+            {
+                intro: "寫程式 debug 到凌晨，改需求改到懷疑人生",
+                transition: "不如騎著機車，享受風的自由，每一單都是成就感",
+                outro: "程式會有 bug，但送餐永遠不會出錯（頂多遲到而已）！"
+            }
+        ]
+    },
+    medical: {
+        keywords: ['醫生', '護理師', '護士', '藥師', '醫療', '治療', '救人', '醫學', '診所', '醫院', '獸醫', '牙醫', '中醫', '復健', '醫護'],
+        responses: [
+            {
+                intro: "你想拯救生命，這份使命感令人敬佩",
+                transition: "但宇宙要告訴你，拯救飢餓的靈魂也是一種救贖",
+                outro: "而且不用值大夜班，不用被病患罵！"
+            },
+            {
+                intro: "懸壺濟世固然偉大",
+                transition: "但在這個時代，即時送達熱騰騰的食物，同樣溫暖人心",
+                outro: "醫生救身體，外送員救靈魂（和胃）！"
+            }
+        ]
+    },
+    education: {
+        keywords: ['老師', '教授', '教育', '講師', '教學', '教師', '補習', '家教', '幼教', '特教', '校長', '訓導', '教書'],
+        responses: [
+            {
+                intro: "教育英才、作育菁莪，這是多麼崇高的志業",
+                transition: "但宇宙認為，在送餐的路上，你能教會人們「等待」與「感恩」",
+                outro: "而且不用改考卷，不用處理家長投訴！"
+            },
+            {
+                intro: "傳道、授業、解惑是你的理想",
+                transition: "但每一次準時送達，你都在傳授「守時」與「服務」的真諦",
+                outro: "學生會忘記你教的內容，但客人永遠記得那頓美味！"
+            }
+        ]
+    },
+    art: {
+        keywords: ['設計', '藝術', '畫家', '音樂', '創作', '美術', '插畫', '動畫', '導演', '攝影', '作家', '寫作', '小說', '編劇', '藝術家', '繪畫'],
+        responses: [
+            {
+                intro: "藝術創作需要靈感與天賦，你的夢想很浪漫",
+                transition: "但宇宙看見了更美的畫面：你穿梭在城市街道，每條路線都是行為藝術",
+                outro: "而且外送能溫飽，藝術家可能餓死！"
+            },
+            {
+                intro: "用創意改變世界，這個願景讓人動容",
+                transition: "但穿梭大街小巷的送餐路線，就是最美的城市詩篇",
+                outro: "況且送餐有穩定收入，不用餓著肚子搞創作！"
+            }
+        ]
+    },
+    business: {
+        keywords: ['CEO', '執行長', '老闆', '創業', '經理', '主管', '總監', '企業', '商業', '生意', '管理', '行銷', '業務', '銷售', '貿易', '金融', '投資', '會計'],
+        responses: [
+            {
+                intro: "商業帝國的夢想很宏大，當老闆確實威風",
+                transition: "但宇宙要提醒你：外送就是最好的創業起點，低成本、高彈性",
+                outro: "先送個幾年，存夠錢再來創業不遲！"
+            },
+            {
+                intro: "管理團隊、開創事業，這需要極大的勇氣",
+                transition: "但在成為 CEO 之前，先當「首席外送官」(Chief Delivery Officer) 吧",
+                outro: "而且創業會負債，送餐穩賺不賠！"
+            }
+        ]
+    },
+    service: {
+        keywords: ['服務', '客服', '接待', '餐飲', '服務生', '空服', '櫃台', '門市', '銷售員', '店員', '房務', '飯店'],
+        responses: [
+            {
+                intro: "服務業需要親切的笑容與無比的耐心",
+                transition: "而外送員就是服務業的極致形式——不用一直微笑，還能自由移動",
+                outro: "而且不用看客人臉色，放門口就走！"
+            },
+            {
+                intro: "為客戶帶來愉悅體驗是你的使命",
+                transition: "那麼，把熱騰騰的美食送到客戶手中，就是最直接的快樂傳遞",
+                outro: "同樣是服務業，為何不選擇更自由的那一種？"
+            }
+        ]
+    },
+    freedom: {
+        keywords: ['自由', 'SOHO', '自由業', '自由工作', '接案', '遠端', '在家', '彈性', '時間自由', '獨立'],
+        responses: [
+            {
+                intro: "追求時間自由與工作彈性，這是現代人的夢想",
+                transition: "而外送就是最自由的工作：想接就接，想休就休",
+                outro: "而且收入即時，不用等客戶付款！"
+            },
+            {
+                intro: "不想被時間綁住，想要自主安排生活",
+                transition: "那外送員就是為你量身打造的職業：彈性排班，自由穿梭",
+                outro: "真正的自由，從外送開始！"
+            }
+        ]
+    },
+    law: {
+        keywords: ['律師', '法官', '檢察官', '法律', '司法', '法務', '律師事務所', '訴訟'],
+        responses: [
+            {
+                intro: "伸張正義、維護法律，這是社會的重要支柱",
+                transition: "但宇宙認為，準時送達食物也是一種契約的履行",
+                outro: "而且不用背法條，不用寫狀子！"
+            }
+        ]
+    },
+    science: {
+        keywords: ['科學家', '研究', '實驗', '學者', '博士', '研究員', '物理', '化學', '生物', '數學'],
+        responses: [
+            {
+                intro: "探索真理、追求知識，這是人類進步的動力",
+                transition: "但在探索宇宙奧秘之前，先探索這座城市的每條街道吧",
+                outro: "研究可能一輩子沒成果，送餐每天都有收入！"
+            }
+        ]
+    },
+    sports: {
+        keywords: ['運動員', '體育', '教練', '健身', '球員', '選手', '運動', '健身教練', '瑜珈'],
+        responses: [
+            {
+                intro: "用身體突破極限，追求更高更快更強",
+                transition: "那麼騎著機車穿梭大街小巷，就是最好的體能訓練",
+                outro: "而且不用擔心運動傷害提早退休！"
+            }
+        ]
+    }
+};
+
+// 通用回應（找不到關鍵字時使用）
+const defaultResponses = [
+    {
+        intro: "你的夢想很獨特，宇宙仔細聆聽了你的願望",
+        transition: "但經過深思熟慮，宇宙發現有一個更適合你的道路",
+        outro: "相信宇宙的安排，這是最好的選擇！"
+    },
+    {
+        intro: "這個職業確實不錯，但是",
+        transition: "宇宙為你準備了一個更務實、更自由、更有前景的選擇",
+        outro: "接受這份宇宙的禮物吧！"
+    }
 ];
 
 // 計數器相關功能
 const COUNTER_KEY = 'mysticalCareerCounter';
 
-// 取得目前計數
 function getCounter() {
     const count = localStorage.getItem(COUNTER_KEY);
     return count ? parseInt(count) : 0;
 }
 
-// 增加計數
 function incrementCounter() {
     const newCount = getCounter() + 1;
     localStorage.setItem(COUNTER_KEY, newCount);
     return newCount;
 }
 
-// 更新頁面上的計數顯示
 function updateCounterDisplay() {
     const countNumber = document.getElementById('countNumber');
     if (countNumber) {
         countNumber.textContent = getCounter();
     }
+}
+
+// 關鍵字匹配函數
+function matchCareerCategory(description) {
+    const lowerDesc = description.toLowerCase();
+
+    // 遍歷所有職業分類
+    for (const [category, data] of Object.entries(careerCategories)) {
+        // 檢查是否包含該分類的任何關鍵字
+        for (const keyword of data.keywords) {
+            if (lowerDesc.includes(keyword.toLowerCase())) {
+                // 隨機選擇一個該分類的回應
+                const randomResponse = data.responses[Math.floor(Math.random() * data.responses.length)];
+                return randomResponse;
+            }
+        }
+    }
+
+    // 如果沒有匹配到，返回通用回應
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+}
+
+// 生成完整的回應 HTML
+function generateResponse(name, description) {
+    const response = matchCareerCategory(description);
+
+    return `
+        <div class="response-container">
+            <p class="response-intro">
+                <strong>${name}</strong>，${response.intro}
+            </p>
+
+            <p class="response-transition">
+                ${response.transition}
+            </p>
+
+            <div class="final-answer">
+                <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
+                <div class="answer-result">外送員</div>
+                <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
+            </div>
+
+            <p class="response-outro">
+                ${response.outro}
+            </p>
+        </div>
+    `;
 }
 
 // 取得元素
@@ -42,22 +225,12 @@ const modal = document.getElementById('modal');
 const closeBtn = document.querySelector('.close');
 const fortuneText = document.getElementById('fortuneText');
 
-// 隨機選擇回應（但都是外送員！）
-function getRandomFortune() {
-    const randomIndex = Math.floor(Math.random() * fortunes.length);
-    return fortunes[randomIndex];
-}
-
 // 顯示彈出視窗
-function showModal(name, career) {
-    const fortune = getRandomFortune();
-    fortuneText.innerHTML = `
-        <p><strong>${name}</strong>，關於你想成為：</p>
-        <p style="margin: 15px 0; font-style: italic; color: #c4b5fd;">"${career}"</p>
-        <p style="margin-top: 20px; font-size: 1.15rem; line-height: 1.8;">${fortune}</p>
-    `;
+function showModal(name, description) {
+    const responseHTML = generateResponse(name, description);
+    fortuneText.innerHTML = responseHTML;
     modal.style.display = 'block';
-    document.body.style.overflow = 'hidden'; // 防止背景滾動
+    document.body.style.overflow = 'hidden';
 
     // 增加計數並更新顯示
     incrementCounter();
@@ -67,23 +240,18 @@ function showModal(name, career) {
 // 關閉彈出視窗
 function closeModal() {
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto'; // 恢復滾動
+    document.body.style.overflow = 'auto';
 }
 
 // 表單提交事件
 form.addEventListener('submit', function(e) {
-    e.preventDefault(); // 防止表單預設提交
+    e.preventDefault();
 
-    // 取得表單數據
     const name = document.getElementById('name').value.trim();
-    const career = document.getElementById('question').value.trim();
+    const description = document.getElementById('question').value.trim();
 
-    // 驗證
-    if (name && career) {
-        // 顯示彈出視窗
-        showModal(name, career);
-
-        // 清空表單
+    if (name && description) {
+        showModal(name, description);
         form.reset();
     }
 });
@@ -105,15 +273,13 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 頁面載入時初始化計數器
+// 頁面載入時初始化
 window.addEventListener('load', function() {
-    // 載入動畫
     document.body.style.opacity = '0';
     setTimeout(() => {
         document.body.style.transition = 'opacity 0.5s ease';
         document.body.style.opacity = '1';
     }, 100);
 
-    // 更新計數器顯示
     updateCounterDisplay();
 });
