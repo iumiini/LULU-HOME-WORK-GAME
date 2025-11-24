@@ -110,8 +110,26 @@ body {
     text-align: center;
     font-size: 1.1rem;
     color: #c4b5fd;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
     opacity: 0.9;
+}
+
+.counter {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #a78bfa;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    background: rgba(167, 139, 250, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(167, 139, 250, 0.2);
+}
+
+.counter #countNumber {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #c4b5fd;
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
 }
 
 .form-group {
