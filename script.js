@@ -206,10 +206,13 @@ function generateResponse(name, description) {
                 ${response.transition}
             </p>
 
-            <div class="final-answer">
-                <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
-                <div class="answer-result">外送員</div>
-                <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
+            <div class="final-answer" data-revealing="true">
+                <div class="revealing-text">✨ 宇宙正在計算中... ✨</div>
+                <div class="answer-content">
+                    <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
+                    <div class="answer-result">外送員</div>
+                    <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
+                </div>
             </div>
 
             <p class="response-outro">
@@ -235,6 +238,33 @@ function showModal(name, description) {
     // 增加計數並更新顯示
     incrementCounter();
     updateCounterDisplay();
+
+    // 先讓「揭曉中」的框框顯示出來
+    setTimeout(() => {
+        const finalAnswer = document.querySelector('.final-answer');
+        if (finalAnswer) {
+            finalAnswer.style.opacity = '1';
+            finalAnswer.style.transform = 'scale(1) translateY(0)';
+        }
+    }, 100);
+
+    // 延遲 1.5 秒後揭曉「外送員」
+    setTimeout(() => {
+        const finalAnswer = document.querySelector('.final-answer');
+        if (finalAnswer) {
+            // 移除揭曉中狀態，顯示真正的答案
+            finalAnswer.removeAttribute('data-revealing');
+            finalAnswer.classList.add('revealed');
+
+            // 自動滾動到「外送員」位置（平滑滾動）
+            setTimeout(() => {
+                finalAnswer.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 200);
+        }
+    }, 1800);
 }
 
 // 關閉彈出視窗
