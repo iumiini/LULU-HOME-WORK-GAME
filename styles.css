@@ -215,6 +215,16 @@ body {
     left: 100%;
 }
 
+.belief-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #a78bfa;
+    margin-top: 15px;
+    opacity: 0.7;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
 /* 彈出視窗樣式 */
 .modal {
     display: none;
