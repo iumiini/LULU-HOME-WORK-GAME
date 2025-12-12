@@ -231,34 +231,55 @@ function matchCareerCategory(description) {
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
 }
 
-// 生成完整的回應 HTML
+// 打字機效果函數
+function typeWriter(element, text, speed = 30) {
+    return new Promise((resolve) => {
+        element.innerHTML = '';
+        element.style.opacity = '1';
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            } else {
+                resolve();
+            }
+        }
+
+        type();
+    });
+}
+
+// 生成完整的回應 HTML（初始版本，文字會被打字機效果填充）
 function generateResponse(name, description) {
     const response = matchCareerCategory(description);
 
-    return `
-        <div class="response-container">
-            <p class="response-intro">
-                <strong>${name}</strong>，${response.intro}
-            </p>
+    return {
+        html: `
+            <div class="response-container">
+                <p class="response-intro" style="opacity: 0;"></p>
+                <p class="response-transition" style="opacity: 0;"></p>
 
-            <p class="response-transition">
-                ${response.transition}
-            </p>
-
-            <div class="final-answer" data-revealing="true">
-                <div class="revealing-text">✨ 宇宙正在計算中... ✨</div>
-                <div class="answer-content">
-                    <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
-                    <div class="answer-result">外送員</div>
-                    <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
+                <div class="final-answer" data-revealing="true">
+                    <div class="revealing-text">✨ 正在分析你的職業期望... ✨</div>
+                    <div class="answer-content">
+                        <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
+                        <div class="answer-result">外送員</div>
+                        <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
+                    </div>
                 </div>
-            </div>
 
-            <p class="response-outro">
-                ${response.outro}
-            </p>
-        </div>
-    `;
+                <p class="response-outro" style="opacity: 0;"></p>
+            </div>
+        `,
+        data: {
+            intro: `<strong>${name}</strong>，${response.intro}`,
+            transition: response.transition,
+            outro: response.outro
+        }
+    };
 }
 
 // 取得元素
@@ -269,8 +290,8 @@ const fortuneText = document.getElementById('fortuneText');
 
 // 顯示彈出視窗
 async function showModal(name, description) {
-    const responseHTML = generateResponse(name, description);
-    fortuneText.innerHTML = responseHTML;
+    const response = generateResponse(name, description);
+    fortuneText.innerHTML = response.html;
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
@@ -278,32 +299,53 @@ async function showModal(name, description) {
     await incrementCounter();
     await updateCounterDisplay();
 
-    // 先讓「揭曉中」的框框顯示出來
+    // 獲取元素
+    const introElement = document.querySelector('.response-intro');
+    const transitionElement = document.querySelector('.response-transition');
+    const outroElement = document.querySelector('.response-outro');
+    const finalAnswer = document.querySelector('.final-answer');
+
+    // 先讓「分析中」的框框顯示出來
     setTimeout(() => {
-        const finalAnswer = document.querySelector('.final-answer');
         if (finalAnswer) {
             finalAnswer.style.opacity = '1';
             finalAnswer.style.transform = 'scale(1) translateY(0)';
         }
     }, 100);
 
-    // 延遲 1.5 秒後揭曉「外送員」
-    setTimeout(() => {
-        const finalAnswer = document.querySelector('.final-answer');
+    // 延遲 800ms 後開始打字機效果
+    setTimeout(async () => {
+        // 第一段：intro（打字效果）
+        await typeWriter(introElement, response.data.intro, 25);
+
+        // 等待 300ms
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // 第二段：transition（打字效果）
+        await typeWriter(transitionElement, response.data.transition, 25);
+
+        // 等待 500ms 後揭曉答案
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // 揭曉「外送員」
         if (finalAnswer) {
-            // 移除揭曉中狀態，顯示真正的答案
             finalAnswer.removeAttribute('data-revealing');
             finalAnswer.classList.add('revealed');
 
-            // 自動滾動到「外送員」位置（平滑滾動）
+            // 自動滾動到「外送員」位置
             setTimeout(() => {
                 finalAnswer.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
                 });
             }, 200);
+
+            // 等待 800ms 後顯示 outro
+            setTimeout(async () => {
+                await typeWriter(outroElement, response.data.outro, 25);
+            }, 800);
         }
-    }, 1800);
+    }, 800);
 }
 
 // 關閉彈出視窗
