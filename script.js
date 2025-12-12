@@ -1,3 +1,10 @@
+// Supabase 配置
+const SUPABASE_URL = 'https://dgdcmqmpnfmoablwxbgs.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
+
+// 初始化 Supabase 客戶端
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // 關鍵字分類系統
 const careerCategories = {
     tech: {
@@ -151,24 +158,56 @@ const defaultResponses = [
     }
 ];
 
-// 計數器相關功能
-const COUNTER_KEY = 'mysticalCareerCounter';
+// 計數器相關功能（使用 Supabase）
+async function getCounter() {
+    try {
+        const { data, error } = await supabase
+            .from('visitor_counter')
+            .select('count')
+            .eq('id', 'global_counter')
+            .single();
 
-function getCounter() {
-    const count = localStorage.getItem(COUNTER_KEY);
-    return count ? parseInt(count) : 0;
+        if (error) {
+            console.error('Error fetching counter:', error);
+            return 0;
+        }
+
+        return data ? data.count : 0;
+    } catch (err) {
+        console.error('Error:', err);
+        return 0;
+    }
 }
 
-function incrementCounter() {
-    const newCount = getCounter() + 1;
-    localStorage.setItem(COUNTER_KEY, newCount);
-    return newCount;
+async function incrementCounter() {
+    try {
+        // 先獲取當前計數
+        const currentCount = await getCounter();
+        const newCount = currentCount + 1;
+
+        // 更新數據庫
+        const { error } = await supabase
+            .from('visitor_counter')
+            .update({ count: newCount })
+            .eq('id', 'global_counter');
+
+        if (error) {
+            console.error('Error updating counter:', error);
+            return currentCount;
+        }
+
+        return newCount;
+    } catch (err) {
+        console.error('Error:', err);
+        return 0;
+    }
 }
 
-function updateCounterDisplay() {
+async function updateCounterDisplay() {
     const countNumber = document.getElementById('countNumber');
     if (countNumber) {
-        countNumber.textContent = getCounter();
+        const count = await getCounter();
+        countNumber.textContent = count;
     }
 }
 
@@ -229,15 +268,15 @@ const closeBtn = document.querySelector('.close');
 const fortuneText = document.getElementById('fortuneText');
 
 // 顯示彈出視窗
-function showModal(name, description) {
+async function showModal(name, description) {
     const responseHTML = generateResponse(name, description);
     fortuneText.innerHTML = responseHTML;
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
     // 增加計數並更新顯示
-    incrementCounter();
-    updateCounterDisplay();
+    await incrementCounter();
+    await updateCounterDisplay();
 
     // 先讓「揭曉中」的框框顯示出來
     setTimeout(() => {
@@ -304,12 +343,13 @@ document.addEventListener('keydown', function(e) {
 });
 
 // 頁面載入時初始化
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
     document.body.style.opacity = '0';
     setTimeout(() => {
         document.body.style.transition = 'opacity 0.5s ease';
         document.body.style.opacity = '1';
     }, 100);
 
-    updateCounterDisplay();
+    // 載入並顯示計數器
+    await updateCounterDisplay();
 });
