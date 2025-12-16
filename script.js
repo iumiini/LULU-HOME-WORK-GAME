@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 特殊名字列表
-const SPECIAL_NAMES = ['lululala', '如鹿之家', 'lulu', '鹿鹿'];
+const SPECIAL_NAMES = ['lululala', 'lulu&lala', 'lala', '如鹿之家', 'lulu', '鹿鹿'];
 
 // 檢查是否為特殊名字
 function isSpecialName(name) {
@@ -332,7 +332,7 @@ function generateResponse(name, description) {
             </div>
         `,
         data: {
-            intro: `<strong>${name}</strong>，${response.intro}`,
+            intro: `${name}，${response.intro}`,
             transition: response.transition,
             outro: response.outro
         },
