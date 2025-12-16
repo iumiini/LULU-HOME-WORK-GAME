@@ -5,6 +5,37 @@ const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
 // 初始化 Supabase 客戶端
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// 特殊名字列表
+const SPECIAL_NAMES = ['lululala', '如鹿之家', 'lulu', '鹿鹿'];
+
+// 檢查是否為特殊名字
+function isSpecialName(name) {
+    const lowerName = name.toLowerCase().trim();
+    return SPECIAL_NAMES.some(special => lowerName.includes(special));
+}
+
+// 檢查是否已經是外送員
+function isAlreadyDeliveryWorker(description) {
+    const lowerDesc = description.toLowerCase();
+    return lowerDesc.includes('外送員') || lowerDesc.includes('外送') ||
+           lowerDesc.includes('送餐') || lowerDesc.includes('foodpanda') ||
+           lowerDesc.includes('uber eat');
+}
+
+// 特殊回應：已經是外送員（中獎感）
+const deliveryWorkerResponse = {
+    intro: "🎊 恭喜你！你已經找到了宇宙的終極職業！",
+    transition: "你不需要任何改變，因為你已經站在人生巔峰！外送員是宇宙中最自由、最充實的工作！",
+    outro: "繼續保持！你是宇宙的驕傲！🏆"
+};
+
+// 特殊回應：特殊名字（VIP待遇）
+const specialNameResponse = {
+    intro: "✨ 尊貴的LULU家族成員，宇宙對你有特別的安排",
+    transition: "身為如鹿之家的一份子，你注定要成為外送界的傳奇人物！這不是建議，這是命運的召喚！",
+    outro: "LULU家族的榮耀等著你！🦌👑"
+};
+
 // 關鍵字分類系統
 const careerCategories = {
     tech: {
@@ -211,8 +242,18 @@ async function updateCounterDisplay() {
     }
 }
 
-// 關鍵字匹配函數
-function matchCareerCategory(description) {
+// 關鍵字匹配函數（含特殊處理）
+function matchCareerCategory(name, description) {
+    // 優先檢查：特殊名字
+    if (isSpecialName(name)) {
+        return specialNameResponse;
+    }
+
+    // 其次檢查：已經是外送員
+    if (isAlreadyDeliveryWorker(description)) {
+        return deliveryWorkerResponse;
+    }
+
     const lowerDesc = description.toLowerCase();
 
     // 遍歷所有職業分類
@@ -254,7 +295,23 @@ function typeWriter(element, text, speed = 30) {
 
 // 生成完整的回應 HTML（初始版本，文字會被打字機效果填充）
 function generateResponse(name, description) {
-    const response = matchCareerCategory(description);
+    const response = matchCareerCategory(name, description);
+
+    // 判斷是否為特殊情況
+    const isSpecial = isSpecialName(name);
+    const isDeliveryWorker = isAlreadyDeliveryWorker(description);
+
+    // 根據情況選擇不同的揭曉文字和樣式
+    let revealingText = "✨ 正在分析你的職業期望... ✨";
+    let answerLabel = "🎯 宇宙的最終指引 🎯";
+
+    if (isDeliveryWorker) {
+        revealingText = "🎉 檢測到特殊身份... 🎉";
+        answerLabel = "🏆 恭喜！你已經是 🏆";
+    } else if (isSpecial) {
+        revealingText = "👑 VIP 身份驗證中... 👑";
+        answerLabel = "🦌 LULU家族專屬指引 🦌";
+    }
 
     return {
         html: `
@@ -262,10 +319,10 @@ function generateResponse(name, description) {
                 <p class="response-intro" style="opacity: 0;"></p>
                 <p class="response-transition" style="opacity: 0;"></p>
 
-                <div class="final-answer" data-revealing="true">
-                    <div class="revealing-text">✨ 正在分析你的職業期望... ✨</div>
+                <div class="final-answer ${isDeliveryWorker || isSpecial ? 'special-case' : ''}" data-revealing="true">
+                    <div class="revealing-text">${revealingText}</div>
                     <div class="answer-content">
-                        <div class="answer-label">🎯 宇宙的最終指引 🎯</div>
+                        <div class="answer-label">${answerLabel}</div>
                         <div class="answer-result">外送員</div>
                         <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
                     </div>
@@ -278,7 +335,8 @@ function generateResponse(name, description) {
             intro: `<strong>${name}</strong>，${response.intro}`,
             transition: response.transition,
             outro: response.outro
-        }
+        },
+        isSpecialCase: isDeliveryWorker || isSpecial
     };
 }
 
