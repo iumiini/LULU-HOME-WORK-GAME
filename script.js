@@ -324,7 +324,6 @@ function generateResponse(name, description) {
                     <div class="answer-content">
                         <div class="answer-label">${answerLabel}</div>
                         <div class="answer-result">外送員</div>
-                        <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
                     </div>
                 </div>
 
