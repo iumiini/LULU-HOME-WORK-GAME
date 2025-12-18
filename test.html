@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動畫測試</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            min-height: 100vh;
+        }
+
+        .test-box {
+            max-width: 600px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+        }
+
+        .test-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .test-box::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        .final-answer {
+            margin: 35px 0;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+            border: 2px solid #fbbf24;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .final-answer.revealed {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .revealing-text {
+            font-size: 1.2rem;
+            color: #fbbf24;
+            animation: revealingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes revealingPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .answer-result {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 20px;
+            color: #fbbf24;
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>🧪 動畫功能測試頁面</h1>
+        <p>此頁面用於測試動畫和滾動功能是否正常運作</p>
+    </div>
+
+    <div style="text-align: center;">
+        <button onclick="testAnimation()">測試 1: 延遲揭曉動畫</button>
+        <button onclick="testScroll()">測試 2: 滾動條功能</button>
+        <button onclick="resetTest()">重置測試</button>
+    </div>
+
+    <div id="testContainer"></div>
+
+    <script>
+        function testAnimation() {
+            const container = document.getElementById('testContainer');
+            container.innerHTML = `
+                <div style="text-align: center; margin: 30px 0;">
+                    <h2>測試 1: 延遲揭曉動畫</h2>
+                    <p>觀察「外送員」是否在 2 秒後彈出...</p>
+                </div>
+                <div class="final-answer" id="testAnswer" data-revealing="true">
+                    <div class="revealing-text">✨ 宇宙正在計算中... ✨</div>
+                    <div class="answer-content" style="display: none;">
+                        <div class="answer-result">外送員</div>
+                    </div>
+                </div>
+            `;
+
+            // 先顯示框框
+            setTimeout(() => {
+                const answer = document.getElementById('testAnswer');
+                answer.style.opacity = '1';
+                answer.style.transform = 'scale(1) translateY(0)';
+            }, 100);
+
+            // 延遲揭曉
+            setTimeout(() => {
+                const answer = document.getElementById('testAnswer');
+                answer.querySelector('.revealing-text').style.display = 'none';
+                answer.querySelector('.answer-content').style.display = 'block';
+                answer.classList.add('revealed');
+            }, 2000);
+        }
+
+        function testScroll() {
+            const container = document.getElementById('testContainer');
+            let content = `
+                <div style="text-align: center; margin: 30px 0;">
+                    <h2>測試 2: 滾動條功能</h2>
+                    <p>這個框框應該可以滾動，並且有漂亮的滾動條</p>
+                </div>
+                <div class="test-box">
+            `;
+
+            for (let i = 1; i <= 20; i++) {
+                content += `<p>這是第 ${i} 行內容。滾動條應該出現在右側。</p>`;
+            }
+
+            content += '</div>';
+            container.innerHTML = content;
+        }
+
+        function resetTest() {
+            document.getElementById('testContainer').innerHTML = '';
+        }
+
+        // 自動執行第一個測試
+        console.log('測試頁面已載入');
+        console.log('CSS 是否支援 ::-webkit-scrollbar:',
+            CSS.supports('selector(::-webkit-scrollbar)') ? '✅ 支援' : '❌ 不支援');
+    </script>
+</body>
+</html>
