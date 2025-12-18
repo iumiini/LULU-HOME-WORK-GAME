@@ -12,11 +12,10 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
-    overflow-x: hidden;
     position: relative;
+    overflow-x: hidden;
 }
 
-/* 星星背景效果 */
 .stars {
     position: fixed;
     top: 0;
@@ -24,6 +23,7 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
+    z-index: 0;
 }
 
 .stars::before,
@@ -34,12 +34,10 @@ body {
     height: 2px;
     background: #fff;
     box-shadow:
-        100px 200px #fff, 300px 100px #fff, 500px 300px #fff,
-        700px 150px #fff, 900px 250px #fff, 200px 400px #fff,
-        400px 500px #fff, 600px 50px #fff, 800px 400px #fff,
-        150px 50px #fff, 350px 350px #fff, 550px 200px #fff,
-        750px 450px #fff, 250px 250px #fff, 450px 150px #fff,
-        650px 350px #fff, 50px 300px #fff, 850px 100px #fff;
+        100px 100px #fff, 200px 50px #fff, 300px 200px #fff,
+        400px 150px #fff, 500px 100px #fff, 600px 250px #fff,
+        700px 50px #fff, 800px 200px #fff, 900px 100px #fff,
+        150px 250px #fff, 350px 100px #fff, 550px 200px #fff;
     animation: twinkle 3s infinite;
 }
 
@@ -49,10 +47,7 @@ body {
     box-shadow:
         50px 150px #fff, 250px 50px #fff, 450px 250px #fff,
         650px 100px #fff, 850px 200px #fff, 150px 350px #fff,
-        350px 450px #fff, 550px 0px #fff, 750px 350px #fff,
-        100px 0px #fff, 300px 300px #fff, 500px 150px #fff,
-        700px 400px #fff, 200px 200px #fff, 400px 100px #fff,
-        600px 300px #fff, 0px 250px #fff, 800px 50px #fff;
+        350px 150px #fff, 550px 300px #fff, 750px 150px #fff;
     animation: twinkle 4s infinite;
 }
 
@@ -62,46 +57,34 @@ body {
 }
 
 .container {
-    max-width: 600px;
-    width: 90%;
-    padding: 20px;
+    position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
 }
 
 .content {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 50px 40px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                0 0 80px rgba(138, 43, 226, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: fadeIn 1s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .title {
-    font-size: 2.5rem;
     text-align: center;
+    font-size: 2.5rem;
     margin-bottom: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-    animation: glow 2s ease-in-out infinite;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite;
 }
 
-@keyframes glow {
+@keyframes titleGlow {
     0%, 100% { filter: brightness(1); }
     50% { filter: brightness(1.3); }
 }
@@ -109,37 +92,33 @@ body {
 .subtitle {
     text-align: center;
     font-size: 1.1rem;
-    color: #c4b5fd;
-    margin-bottom: 15px;
-    opacity: 0.9;
+    color: #a78bfa;
+    margin-bottom: 20px;
 }
 
 .counter {
     text-align: center;
     font-size: 0.95rem;
-    color: #a78bfa;
+    color: #c4b5fd;
     margin-bottom: 30px;
-    padding: 10px 20px;
+    padding: 10px;
     background: rgba(167, 139, 250, 0.1);
     border-radius: 10px;
-    border: 1px solid rgba(167, 139, 250, 0.2);
 }
 
 .counter #countNumber {
-    font-weight: 700;
+    color: #fbbf24;
+    font-weight: bold;
     font-size: 1.1rem;
-    color: #c4b5fd;
-    text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
-    font-size: 1rem;
+    margin-bottom: 8px;
     color: #e0e7ff;
     font-weight: 500;
 }
@@ -147,27 +126,26 @@ body {
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     color: #fff;
     font-size: 1rem;
     transition: all 0.3s ease;
-    font-family: inherit;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #8b5cf6;
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .form-group textarea {
@@ -177,27 +155,18 @@ body {
 
 .submit-btn {
     width: 100%;
-    padding: 18px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     border: none;
     border-radius: 10px;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 20px;
     position: relative;
     overflow: hidden;
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
-}
-
-.submit-btn:active {
-    transform: translateY(0);
+    margin-bottom: 10px;
 }
 
 .submit-btn::before {
@@ -207,25 +176,27 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
 }
 
 .submit-btn:hover::before {
     left: 100%;
 }
 
-.belief-text {
-    text-align: center;
-    font-size: 0.85rem;
-    color: #a78bfa;
-    margin-top: 15px;
-    opacity: 0.7;
-    font-style: italic;
-    letter-spacing: 1px;
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
 }
 
-/* 彈出視窗樣式 */
+.belief-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #c4b5fd;
+    font-style: italic;
+    opacity: 0.8;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -236,32 +207,24 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
-    animation: modalFadeIn 0.3s ease;
-}
-
-@keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }
 
 .modal-content {
-    position: relative;
-    background: linear-gradient(135deg, rgba(15, 12, 41, 0.95), rgba(48, 43, 99, 0.95));
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
     margin: 5% auto;
-    padding: 40px;
-    border: 1px solid rgba(138, 43, 226, 0.5);
+    padding: 30px;
+    border: 2px solid #667eea;
     border-radius: 20px;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
-    animation: modalSlideIn 0.5s ease;
+    box-shadow: 0 0 50px rgba(102, 126, 234, 0.5);
+    position: relative;
 }
 
-/* 美化滾動條 */
 .modal-content::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 .modal-content::-webkit-scrollbar-track {
@@ -275,29 +238,16 @@ body {
 }
 
 .modal-content::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #764ba2, #667eea);
-}
-
-@keyframes modalSlideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    background: linear-gradient(135deg, #764ba2, #f093fb);
 }
 
 .close {
-    position: absolute;
-    right: 20px;
-    top: 15px;
     color: #aaa;
-    font-size: 32px;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.3s;
 }
 
 .close:hover,
@@ -307,115 +257,43 @@ body {
 
 .modal-title {
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #a78bfa;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
 }
 
 .fortune-text {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 25px;
-    border-radius: 15px;
+    color: #e0e7ff;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.response-container {
+    padding: 20px 0;
+}
+
+.response-intro,
+.response-transition,
+.response-outro {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #e0e7ff;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.5), transparent);
-    margin: 30px 0;
-}
-
-.links-section {
-    text-align: center;
-}
-
-.links-intro {
-    font-size: 1rem;
     color: #c4b5fd;
     margin-bottom: 20px;
 }
 
-.links-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 15px 25px;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.social-link.youtube {
-    background: linear-gradient(135deg, #ff0000, #cc0000);
-}
-
-.social-link.youtube:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
-}
-
-.social-link.donation {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.social-link.donation:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
-}
-
-/* 智能回應樣式 */
-.response-container {
-    text-align: center;
-}
-
-.response-intro {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: #e0e7ff;
-    margin-bottom: 20px;
-}
-
-.response-transition {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: #c4b5fd;
-    margin-bottom: 30px;
-    font-style: italic;
-}
-
-/* 「外送員」突出區塊 - 最重要的部分！ */
 .final-answer {
     margin: 35px 0;
     padding: 30px 20px;
     background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
     border: 2px solid #fbbf24;
     border-radius: 15px;
-    box-shadow:
-        0 0 30px rgba(251, 191, 36, 0.4),
-        inset 0 0 20px rgba(251, 191, 36, 0.1);
-    /* 初始狀態：隱藏 */
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+    text-align: center;
     opacity: 0;
     transform: scale(0.8) translateY(20px);
     transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* 特殊情況（中獎感）*/
 .final-answer.special-case {
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.2));
     border: 3px solid #ffd700;
@@ -450,13 +328,12 @@ body {
     }
     75% {
         box-shadow:
-            0 0 120px rgba(255, 215, 0, 1),
+            0 0 120px rgba(255, 215, 0, 1.2),
             inset 0 0 60px rgba(255, 215, 0, 0.5),
-            0 0 180px rgba(255, 69, 0, 0.9);
+            0 0 180px rgba(255, 100, 0, 1);
     }
 }
 
-/* 揭曉中的狀態 */
 .final-answer[data-revealing="true"] .answer-content {
     display: none;
 }
@@ -469,15 +346,18 @@ body {
     display: none;
     font-size: 1.2rem;
     color: #fbbf24;
+    font-weight: 600;
     animation: revealingPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes revealingPulse {
     0%, 100% {
         opacity: 0.5;
+        transform: scale(1);
     }
     50% {
         opacity: 1;
+        transform: scale(1.05);
     }
 }
 
@@ -485,20 +365,18 @@ body {
     display: block;
 }
 
-/* 揭曉時的狀態 */
 .final-answer.revealed {
     opacity: 1;
     transform: scale(1) translateY(0);
     animation: finalAnswerPulse 2s ease-in-out infinite, revealBounce 0.8s ease-out;
 }
 
-/* 揭曉時的彈跳動畫 */
 @keyframes revealBounce {
     0% {
         transform: scale(0.8) translateY(20px);
         opacity: 0;
     }
-    60% {
+    50% {
         transform: scale(1.1) translateY(-10px);
     }
     100% {
@@ -509,23 +387,18 @@ body {
 
 @keyframes finalAnswerPulse {
     0%, 100% {
-        box-shadow:
-            0 0 30px rgba(251, 191, 36, 0.4),
-            inset 0 0 20px rgba(251, 191, 36, 0.1);
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
     }
     50% {
-        box-shadow:
-            0 0 40px rgba(251, 191, 36, 0.6),
-            inset 0 0 30px rgba(251, 191, 36, 0.2);
+        box-shadow: 0 0 50px rgba(251, 191, 36, 0.8);
     }
 }
 
 .answer-label {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #fbbf24;
     margin-bottom: 15px;
     font-weight: 600;
-    letter-spacing: 1px;
 }
 
 .answer-result {
@@ -556,14 +429,6 @@ body {
     }
 }
 
-.answer-decoration {
-    color: #fbbf24;
-    opacity: 0.6;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-}
-
 .response-outro {
     font-size: 1rem;
     line-height: 1.8;
@@ -572,26 +437,63 @@ body {
     font-weight: 500;
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
-    .content {
-        padding: 30px 25px;
-    }
+.divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #667eea, transparent);
+    margin: 30px 0;
+}
 
+.links-section {
+    text-align: center;
+}
+
+.links-intro {
+    color: #c4b5fd;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.links-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.social-link.youtube {
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+}
+
+.social-link.donation {
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
     .title {
         font-size: 2rem;
     }
 
-    .modal-content {
+    .content {
         padding: 30px 20px;
-        margin: 10% auto;
     }
 
-    .modal-title {
-        font-size: 1.5rem;
-    }
-
-    /* 手機版「外送員」樣式調整 */
     .answer-result {
         font-size: 2.5rem;
         letter-spacing: 15px;
@@ -600,7 +502,7 @@ body {
     .response-intro,
     .response-transition,
     .response-outro {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
 
     .final-answer {

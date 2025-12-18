@@ -1,20 +1,14 @@
-// Supabase 配置
 const SUPABASE_URL = 'https://dgdcmqmpnfmoablwxbgs.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
-
-// 初始化 Supabase 客戶端
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// 特殊名字列表
 const SPECIAL_NAMES = ['lululala', 'lulu&lala', 'lala', '如鹿之家', 'lulu', '鹿鹿'];
 
-// 檢查是否為特殊名字
 function isSpecialName(name) {
     const lowerName = name.toLowerCase().trim();
     return SPECIAL_NAMES.some(special => lowerName.includes(special));
 }
 
-// 檢查是否已經是外送員
 function isAlreadyDeliveryWorker(description) {
     const lowerDesc = description.toLowerCase();
     return lowerDesc.includes('外送員') || lowerDesc.includes('外送') ||
@@ -22,21 +16,18 @@ function isAlreadyDeliveryWorker(description) {
            lowerDesc.includes('uber eat');
 }
 
-// 特殊回應：已經是外送員（中獎感）
 const deliveryWorkerResponse = {
     intro: "🎊 恭喜你！你已經找到了宇宙的終極職業！",
     transition: "你不需要任何改變，因為你已經站在人生巔峰！外送員是宇宙中最自由、最充實的工作！",
     outro: "繼續保持！你是宇宙的驕傲！🏆"
 };
 
-// 特殊回應：特殊名字（VIP待遇）
 const specialNameResponse = {
     intro: "✨ 尊貴的LULU家族成員，宇宙對你有特別的安排",
     transition: "身為如鹿之家的一份子，你注定要成為外送界的傳奇人物！這不是建議，這是命運的召喚！",
     outro: "LULU家族的榮耀等著你！🦌👑"
 };
 
-// 關鍵字分類系統
 const careerCategories = {
     tech: {
         keywords: ['工程師', '程式', '軟體', '開發', 'AI', '人工智慧', '科技', '網頁', 'APP', '資訊', '程式設計師', '資工', '電腦', '演算法', '網路', '系統', '架構師', '前端', '後端', '全端'],
@@ -175,7 +166,6 @@ const careerCategories = {
     }
 };
 
-// 通用回應（找不到關鍵字時使用）
 const defaultResponses = [
     {
         intro: "你的夢想很獨特，宇宙仔細聆聽了你的願望",
@@ -189,7 +179,6 @@ const defaultResponses = [
     }
 ];
 
-// 計數器相關功能（使用 Supabase）
 async function getCounter() {
     try {
         const { data, error } = await supabase
@@ -197,12 +186,10 @@ async function getCounter() {
             .select('count')
             .eq('id', 'global_counter')
             .single();
-
         if (error) {
             console.error('Error fetching counter:', error);
             return 0;
         }
-
         return data ? data.count : 0;
     } catch (err) {
         console.error('Error:', err);
@@ -214,17 +201,14 @@ async function incrementCounter() {
     try {
         const currentCount = await getCounter();
         const newCount = currentCount + 1;
-
         const { error } = await supabase
             .from('visitor_counter')
             .update({ count: newCount })
             .eq('id', 'global_counter');
-
         if (error) {
             console.error('Error updating counter:', error);
             return currentCount;
         }
-
         return newCount;
     } catch (err) {
         console.error('Error:', err);
@@ -240,18 +224,14 @@ async function updateCounterDisplay() {
     }
 }
 
-// 關鍵字匹配函數（含特殊處理）
 function matchCareerCategory(name, description) {
     if (isSpecialName(name)) {
         return specialNameResponse;
     }
-
     if (isAlreadyDeliveryWorker(description)) {
         return deliveryWorkerResponse;
     }
-
     const lowerDesc = description.toLowerCase();
-
     for (const [category, data] of Object.entries(careerCategories)) {
         for (const keyword of data.keywords) {
             if (lowerDesc.includes(keyword.toLowerCase())) {
@@ -260,17 +240,14 @@ function matchCareerCategory(name, description) {
             }
         }
     }
-
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
 }
 
-// 打字機效果函數
 function typeWriter(element, text, speed = 30) {
     return new Promise((resolve) => {
         element.innerHTML = '';
         element.style.opacity = '1';
         let i = 0;
-
         function type() {
             if (i < text.length) {
                 element.innerHTML += text.charAt(i);
@@ -280,15 +257,12 @@ function typeWriter(element, text, speed = 30) {
                 resolve();
             }
         }
-
         type();
     });
 }
 
-// 生成完整的回應 HTML
 function generateResponse(name, description) {
     const response = matchCareerCategory(name, description);
-
     const isSpecial = isSpecialName(name);
     const isDeliveryWorker = isAlreadyDeliveryWorker(description);
 
@@ -308,7 +282,6 @@ function generateResponse(name, description) {
             <div class="response-container">
                 <p class="response-intro" style="opacity: 0;"></p>
                 <p class="response-transition" style="opacity: 0;"></p>
-
                 <div class="final-answer ${isDeliveryWorker || isSpecial ? 'special-case' : ''}" data-revealing="true">
                     <div class="revealing-text">${revealingText}</div>
                     <div class="answer-content">
@@ -316,7 +289,6 @@ function generateResponse(name, description) {
                         <div class="answer-result">外送員</div>
                     </div>
                 </div>
-
                 <p class="response-outro" style="opacity: 0;"></p>
             </div>
         `,
@@ -329,13 +301,11 @@ function generateResponse(name, description) {
     };
 }
 
-// 取得元素
 const form = document.getElementById('fortuneForm');
 const modal = document.getElementById('modal');
 const closeBtn = document.querySelector('.close');
 const fortuneText = document.getElementById('fortuneText');
 
-// 顯示彈出視窗
 async function showModal(name, description) {
     const response = generateResponse(name, description);
     fortuneText.innerHTML = response.html;
@@ -381,49 +351,40 @@ async function showModal(name, description) {
     }, 800);
 }
 
-// 關閉彈出視窗
 function closeModal() {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
 }
 
-// 表單提交事件
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-
     const name = document.getElementById('name').value.trim();
     const description = document.getElementById('question').value.trim();
-
     if (name && description) {
         showModal(name, description);
         form.reset();
     }
 });
 
-// 點擊關閉按鈕
 closeBtn.addEventListener('click', closeModal);
 
-// 點擊背景關閉
 window.addEventListener('click', function(e) {
     if (e.target === modal) {
         closeModal();
     }
 });
 
-// 按下 ESC 鍵關閉
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modal.style.display === 'block') {
         closeModal();
     }
 });
 
-// 頁面載入時初始化
 window.addEventListener('load', async function() {
     document.body.style.opacity = '0';
     setTimeout(() => {
         document.body.style.transition = 'opacity 0.5s ease';
         document.body.style.opacity = '1';
     }, 100);
-
     await updateCounterDisplay();
 });
