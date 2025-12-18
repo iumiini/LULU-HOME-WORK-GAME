@@ -1,4 +1,4 @@
-// Supabase 配置
+// Supabase 配置 - 更新於 2025-12-18
 const SUPABASE_URL = 'https://dgdcmqmpnfmoablwxbgs.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
 
