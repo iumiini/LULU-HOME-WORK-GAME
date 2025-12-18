@@ -1,4 +1,4 @@
-// Supabase 配置 - 更新於 2025-12-18
+// Supabase 配置
 const SUPABASE_URL = 'https://dgdcmqmpnfmoablwxbgs.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5UvBU9_j0CuvOjqz1Vmk0A_2lKBPG6h';
 
@@ -212,11 +212,9 @@ async function getCounter() {
 
 async function incrementCounter() {
     try {
-        // 先獲取當前計數
         const currentCount = await getCounter();
         const newCount = currentCount + 1;
 
-        // 更新數據庫
         const { error } = await supabase
             .from('visitor_counter')
             .update({ count: newCount })
@@ -244,31 +242,25 @@ async function updateCounterDisplay() {
 
 // 關鍵字匹配函數（含特殊處理）
 function matchCareerCategory(name, description) {
-    // 優先檢查：特殊名字
     if (isSpecialName(name)) {
         return specialNameResponse;
     }
 
-    // 其次檢查：已經是外送員
     if (isAlreadyDeliveryWorker(description)) {
         return deliveryWorkerResponse;
     }
 
     const lowerDesc = description.toLowerCase();
 
-    // 遍歷所有職業分類
     for (const [category, data] of Object.entries(careerCategories)) {
-        // 檢查是否包含該分類的任何關鍵字
         for (const keyword of data.keywords) {
             if (lowerDesc.includes(keyword.toLowerCase())) {
-                // 隨機選擇一個該分類的回應
                 const randomResponse = data.responses[Math.floor(Math.random() * data.responses.length)];
                 return randomResponse;
             }
         }
     }
 
-    // 如果沒有匹配到，返回通用回應
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
 }
 
@@ -293,15 +285,13 @@ function typeWriter(element, text, speed = 30) {
     });
 }
 
-// 生成完整的回應 HTML（初始版本，文字會被打字機效果填充）
+// 生成完整的回應 HTML
 function generateResponse(name, description) {
     const response = matchCareerCategory(name, description);
 
-    // 判斷是否為特殊情況
     const isSpecial = isSpecialName(name);
     const isDeliveryWorker = isAlreadyDeliveryWorker(description);
 
-    // 根據情況選擇不同的揭曉文字和樣式
     let revealingText = "✨ 正在分析你的職業期望... ✨";
     let answerLabel = "🎯 宇宙的最終指引 🎯";
 
@@ -324,7 +314,6 @@ function generateResponse(name, description) {
                     <div class="answer-content">
                         <div class="answer-label">${answerLabel}</div>
                         <div class="answer-result">外送員</div>
-                        <div class="answer-decoration">━━━━━━━━━━━━━━━━━━━</div>
                     </div>
                 </div>
 
@@ -353,17 +342,14 @@ async function showModal(name, description) {
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    // 增加計數並更新顯示
     await incrementCounter();
     await updateCounterDisplay();
 
-    // 獲取元素
     const introElement = document.querySelector('.response-intro');
     const transitionElement = document.querySelector('.response-transition');
     const outroElement = document.querySelector('.response-outro');
     const finalAnswer = document.querySelector('.final-answer');
 
-    // 先讓「分析中」的框框顯示出來
     setTimeout(() => {
         if (finalAnswer) {
             finalAnswer.style.opacity = '1';
@@ -371,26 +357,16 @@ async function showModal(name, description) {
         }
     }, 100);
 
-    // 延遲 800ms 後開始打字機效果
     setTimeout(async () => {
-        // 第一段：intro（打字效果）
         await typeWriter(introElement, response.data.intro, 25);
-
-        // 等待 300ms
         await new Promise(resolve => setTimeout(resolve, 300));
-
-        // 第二段：transition（打字效果）
         await typeWriter(transitionElement, response.data.transition, 25);
-
-        // 等待 500ms 後揭曉答案
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // 揭曉「外送員」
         if (finalAnswer) {
             finalAnswer.removeAttribute('data-revealing');
             finalAnswer.classList.add('revealed');
 
-            // 自動滾動到「外送員」位置
             setTimeout(() => {
                 finalAnswer.scrollIntoView({
                     behavior: 'smooth',
@@ -398,7 +374,6 @@ async function showModal(name, description) {
                 });
             }, 200);
 
-            // 等待 800ms 後顯示 outro
             setTimeout(async () => {
                 await typeWriter(outroElement, response.data.outro, 25);
             }, 800);
@@ -450,6 +425,5 @@ window.addEventListener('load', async function() {
         document.body.style.opacity = '1';
     }, 100);
 
-    // 載入並顯示計數器
     await updateCounterDisplay();
 });
